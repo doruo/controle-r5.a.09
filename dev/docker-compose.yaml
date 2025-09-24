@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
 
   app-dev:
@@ -40,15 +38,6 @@ services:
     networks:
       - db
       - external
-    logging:
-      driver: loki
-      options:
-        loki-url: http://127.0.0.1:3100/loki/api/v1/push
-        loki-pipeline-stages: |
-          - regex:
-              expression: '(level|lvl|severity)=(?P<level>\w+)'
-          - labels:
-              level:
 
   phpmyadmin:
     image: phpmyadmin:latest
@@ -58,14 +47,11 @@ services:
       PMA_HOST: bd-dev
       PMA_USER: ${PMA_USER}
       PMA_PASSWORD: ${PMA_PASSWORD}
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.admindb-web.rule=Host(`admindb.td.anthonymoll.fr`)"
-      - "traefik.http.routers.admindb-web.entrypoints=web"
-      - "traefik.http.services.admindb.loadbalancer.server.port=80"
     networks:
       - db
       - external
+    depends_on:
+      - bd-dev
 
 networks:
   db:
