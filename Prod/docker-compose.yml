@@ -3,11 +3,12 @@ version: '1'
 services: 
   db-prod:
     image: mariadb:11.4 #harbinfo.iutmontpellier.univ-montp2.fr/moreirap/db-prod:latest
+    env_file: ".env"
     environment: 
-      - MARIADB_DATABASE=demo_app
-      - MARIADB_USER=demo_user
-      - MARIADB_ROOT_PASSWORD=change_me 
-      - MARIADB_PASSWORD=change_me 
+      - MARIADB_DATABASE=${MARIADB_DATABASE}
+      - MARIADB_USER=${MARIADB_USER}
+      - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
+      - MARIADB_PASSWORD=${MARIADB_PASSWORD}
     volumes:
       - ./database:/var/lib/mysql
     ports:
