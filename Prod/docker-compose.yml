@@ -1,6 +1,4 @@
-version: '1'
-
-services: 
+services:
   db-prod:
     image: mariadb:11.4 #harbinfo.iutmontpellier.univ-montp2.fr/moreirap/db-prod:latest
     env_file: ".env"
