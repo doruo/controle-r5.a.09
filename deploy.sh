@@ -1,7 +1,7 @@
 sudo docker network create external;
 
 # Compose all stacks
-STACKS="traefik logs"
+STACKS="logs traefik monitor dev prod"
 for dir in $STACKS
 do
   echo "- Deploying stack: $dir"

@@ -1,8 +1,3 @@
-networks:
-  loki:
-  external:
-    external: true
-
 services:
   #loki est un gestionnaire centralis´e de logs
   loki:
@@ -15,6 +10,7 @@ services:
       -config.file=/etc/loki/local-config.yaml
     networks:
       - loki
+      - external
   #promtail permet de faire remonter les logs de la machine locale dans le loki
   promtail:
     image: grafana/promtail:2.9.0
@@ -23,6 +19,7 @@ services:
     command: -config.file=/etc/promtail/config.yml
     networks:
     - loki
+    - external
   #grafana est l’interface graphique qui permet d’interroger l’API de loki
   grafana:
     environment:
@@ -60,4 +57,9 @@ services:
       - "traefik.http.services.grafana.loadbalancer.server.port=${GRAFANA_PORT_EXT}"
     networks:
         - loki
+        - external
+networks:
+  loki:
+  external:
+    external: true
 
