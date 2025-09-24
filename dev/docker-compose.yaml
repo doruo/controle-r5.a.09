@@ -11,7 +11,7 @@ services:
     ports:
       - "8181:80"
     volumes:
-      - ./src/php:/var/www/html
+      - ../src/php:/var/www/html
     networks:
       - db
       - external
@@ -55,7 +55,7 @@ services:
     ports:
       - "8282:80"
     environment:
-      PMA_HOST: ${PMA_HOST}
+      PMA_HOST: bd-dev
       PMA_USER: ${PMA_USER}
       PMA_PASSWORD: ${PMA_PASSWORD}
     labels:
