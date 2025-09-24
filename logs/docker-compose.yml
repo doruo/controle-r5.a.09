@@ -1,5 +1,8 @@
 networks:
   loki:
+  external:
+    external: true
+
 services:
   #loki est un gestionnaire centralis´e de logs
   loki:
@@ -56,4 +59,5 @@ services:
       - "traefik.http.routers.grafana.entrypoints=web"
       - "traefik.http.services.grafana.loadbalancer.server.port=${GRAFANA_PORT_EXT}"
     networks:
-      - loki
+        - loki
+
