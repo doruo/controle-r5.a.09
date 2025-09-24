@@ -50,5 +50,10 @@ services:
       - .env
     ports:
       - "${GRAFANA_PORT_INT}:${GRAFANA_PORT_EXT}"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.grafana.rule=Host(`logs.td.anthonymoll.fr`)"
+      - "traefik.http.routers.grafana.entrypoints=web"
+      - "traefik.http.services.grafana.loadbalancer.server.port=${GRAFANA_PORT_EXT}"
     networks:
       - loki
