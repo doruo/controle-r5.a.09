@@ -8,9 +8,9 @@
 
 ## Logs
 
-L'interface grafana, connecté à l'API Loki, est accesible sur https://logs.td.anthonymoll.fr.
+L'interface grafana, connecté à l'API Loki, est accesible sur http://logs.td.anthonymoll.fr.
 
-L'interface de monitoring de Prometheus, est accesible sur https://monitoring.td.anthonymoll.fr.
+L'interface de monitoring de Prometheus, est accesible sur http://monitoring.td.anthonymoll.fr.
 
 L'interface de Traefik est accesible sur http://traefik.td.anthonymoll.fr.
 
