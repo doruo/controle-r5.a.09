@@ -8,7 +8,9 @@ services:
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
     ports:
-      - "9090:9090"
+      - "${PROMETHEUS_PORTINT}:${PROMETHEUS_PORTEXT}"
+    env_file:
+      - .env
     networks:
       - monitoring
       - external
@@ -16,7 +18,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.prometheus.rule=Host(`monitoring.td.anthonymoll.fr`)"
       - "traefik.http.routers.prometheus.entrypoints=web"
-      - "traefik.http.services.prometheus.loadbalancer.server.port=9090"
+      - "traefik.http.services.prometheus.loadbalancer.server.port=${PROMETHEUS_PORTINT}"
     logging:
       driver: loki
       options:
