@@ -1,0 +1,38 @@
+services:
+  prometheus:
+    image: prom/prometheus:v2.52.0
+    container_name: prometheus
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    ports:
+      - "${PROMETHEUS_PORTINT}:${PROMETHEUS_PORTEXT}"
+    env_file:
+      - .env
+    networks:
+      - monitoring
+      - external
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.prometheus.rule=Host(`monitoring.td.anthonymoll.fr`)"
+      - "traefik.http.routers.prometheus.entrypoints=web"
+      - "traefik.http.services.prometheus.loadbalancer.server.port=${PROMETHEUS_PORTINT}"
+    logging:
+      driver: loki
+      options:
+        loki-url: http://127.0.0.1:3100/loki/api/v1/push
+        loki-pipeline-stages: |
+          - regex:
+              expression: '(level|lvl|severity)=(?P<level>\w+)'
+          - labels:
+              level:
+      
+      
+
+networks:
+  monitoring:
+    driver: bridge
+  external:
+    external: true
