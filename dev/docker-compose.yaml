@@ -1,0 +1,59 @@
+services:
+
+  app-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      XDEBUG_TRIGGER: 1
+    ports:
+      - "8181:80"
+    volumes:
+      - ../src/php:/var/www/html
+    networks:
+      - db
+      - external
+    logging:
+      driver: loki
+      options:
+        loki-url: http://127.0.0.1:3100/loki/api/v1/push
+        loki-pipeline-stages: |
+          - regex:
+              expression: '(level|lvl|severity)=(?P<level>\w+)'
+          - labels:
+              level:
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dev-web.rule=Host(`dev.td.anthonymoll.fr`)"
+      - "traefik.http.routers.dev-web.entrypoints=web"
+      - "traefik.http.services.dev.loadbalancer.server.port=80"
+
+  bd-dev:
+    image: mariadb:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    networks:
+      - db
+      - external
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    ports:
+      - "8282:80"
+    environment:
+      PMA_HOST: bd-dev
+      PMA_USER: ${PMA_USER}
+      PMA_PASSWORD: ${PMA_PASSWORD}
+    networks:
+      - db
+      - external
+    depends_on:
+      - bd-dev
+
+networks:
+  db:
+  external:
+    external: true
