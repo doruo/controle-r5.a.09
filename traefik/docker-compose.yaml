@@ -8,13 +8,15 @@ services:
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
     ports:
-      - "80:80"
-      - "8080:8080"
+      - "${TRAEFIK_PORTINT1}:${TRAEFIK_PORTEXT1}"
+      - "${TRAEFIK_PORTINT2}:${TRAEFIK_PORTEXT2}"
+    env_file:
+      - .env
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.traefik.rule=Host(`traefik.td.anthonymoll.fr`)"
       - "traefik.http.routers.traefik.entrypoints=web"
-      - "traefik.http.services.traefik.loadbalancer.server.port=8080"
+      - "traefik.http.services.traefik.loadbalancer.server.port=${TRAEFIK_PORTINT2}"
     logging:
       driver: loki
       options:
