@@ -1,0 +1,60 @@
+version: '1'
+
+services: 
+  db-prod:
+    image: mariadb:11.4 #harbinfo.iutmontpellier.univ-montp2.fr/moreirap/db-prod:latest
+    environment: 
+      - MARIADB_DATABASE=demo_app
+      - MARIADB_USER=demo_user
+      - MARIADB_ROOT_PASSWORD=change_me 
+      - MARIADB_PASSWORD=change_me 
+    volumes:
+      - ./database:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks: 
+      - db
+    logging:
+      driver: loki
+      options:
+        loki-url: http://127.0.0.1:3100/loki/api/v1/push
+        loki-pipeline-stages: |
+          - regex:
+              expression: ’(level|lvl|severity)=(?P<level>\w+)’
+          - labels:
+              level:
+
+  app-prod:
+    build: #harbinfo.iutmontpellier.univ-montp2.fr/moreirap/app-prod:latest
+      context: . 
+      dockerfile_inline: |
+        FROM php:8.2-apache 
+        RUN docker-php-ext-install pdo pdo_mysql
+        RUN docker-php-ext-enable pdo pdo_mysql
+    volumes:
+      - ../src/php:/var/www/html/
+    ports: 
+      - "8000:80"
+    networks: 
+      - db
+      - external
+    logging:
+      driver: loki
+      options:
+        loki-url: http://127.0.0.1:3100/loki/api/v1/push
+        loki-pipeline-stages: |
+          - regex:
+              expression: ’(level|lvl|severity)=(?P<level>\w+)’
+          - labels:
+              level:
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.app-prod-web.rule=Host(`prod.td.anthonymoll.fr`)"
+      - "traefik.http.routers.app-prod-web.entrypoints=web"
+      - "traefik.http.services.app-prod.loadbalancer.server.port=80"
+
+networks:
+  db:
+  external:
+    external: true
+
