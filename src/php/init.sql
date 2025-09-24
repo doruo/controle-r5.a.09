@@ -1,0 +1,18 @@
+-- init.sql
+CREATE DATABASE IF NOT EXISTS __DB_NAME__
+  CHARACTER SET utf8mb4
+  COLLATE utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS __DB_NAME__.items (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  label VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+INSERT INTO __DB_NAME__.items (label)
+SELECT * FROM (
+  SELECT 'Premier tuple'  AS label
+  UNION ALL SELECT 'Deuxième tuple'
+  UNION ALL SELECT 'Troisième tuple'
+) AS seed
+WHERE NOT EXISTS (SELECT 1 FROM __DB_NAME__.items LIMIT 1);
