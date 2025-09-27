@@ -1,4 +1,6 @@
-sudo docker network create external;
+sudo docker network create external
+sudo docker plugin install grafana/loki-docker-driver:latest --alias loki --grant-all-permissions
+sudo docker plugin enable loki
 
 # Compose all stacks
 STACKS="logs traefik monitor dev Prod"
