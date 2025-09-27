@@ -26,10 +26,7 @@ services:
   app-prod:
     build: #harbinfo.iutmontpellier.univ-montp2.fr/moreirap/app-prod:latest
       context: . 
-      dockerfile_inline: |
-        FROM php:8.2-apache 
-        RUN docker-php-ext-install pdo pdo_mysql
-        RUN docker-php-ext-enable pdo pdo_mysql
+      dockerfile: Dockerfile
     volumes:
       - ../src/php:/var/www/html/
     ports: 
