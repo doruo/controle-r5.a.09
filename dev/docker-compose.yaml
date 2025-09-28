@@ -9,7 +9,7 @@ services:
     restart:
       always
     ports:
-      - "8282:80"
+      - "8181:80"
     volumes:
       - ../src/php:/var/www/html
     networks:
