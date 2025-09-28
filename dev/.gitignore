@@ -1,9 +1,2 @@
-# vscode
-.idea
-.vscode
-
 # env vars
 .env.local
-
-# db Prod
-/Prod/database/

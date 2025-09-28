@@ -2,10 +2,12 @@ services:
 
   app-dev:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: ./dev/Dockerfile
     environment:
       XDEBUG_TRIGGER: 1
+    restart:
+      always
     ports:
       - "8181:80"
     volumes:
@@ -24,9 +26,9 @@ services:
               level:
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.dev-web.rule=Host(`dev.td.anthonymoll.fr`)"
-      - "traefik.http.routers.dev-web.entrypoints=web"
-      - "traefik.http.services.dev.loadbalancer.server.port=80"
+      - "traefik.http.routers.app-dev.rule=Host(`dev.td.anthonymoll.fr`)"
+      - "traefik.http.routers.app-dev.entrypoints=web"
+      - "traefik.http.services.app-dev.loadbalancer.server.port=80"
 
   bd-dev:
     image: mariadb:latest
@@ -35,21 +37,29 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
+    ports:
+      - "3306:3306"
+    restart:
+      always
     networks:
       - db
-      - external
 
-  phpmyadmin:
+  admindb:
     image: phpmyadmin:latest
     ports:
       - "8282:80"
     environment:
-      PMA_HOST: bd-dev
+      PMA_HOST: ${PMA_HOST}
       PMA_USER: ${PMA_USER}
       PMA_PASSWORD: ${PMA_PASSWORD}
     networks:
       - db
       - external
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.admindb.rule=Host(`admindb.td.anthonymoll.fr`)"
+      - "traefik.http.routers.admindb.entrypoints=web"
+      - "traefik.http.services.admindb.loadbalancer.server.port=80"
     depends_on:
       - bd-dev
 
