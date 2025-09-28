@@ -26,10 +26,7 @@ services:
   app-prod:
     build: #harbinfo.iutmontpellier.univ-montp2.fr/moreirap/app-prod:latest
       context: . 
-      dockerfile_inline: |
-        FROM php:8.2-apache 
-        RUN docker-php-ext-install pdo pdo_mysql
-        RUN docker-php-ext-enable pdo pdo_mysql
+      dockerfile: Dockerfile
     volumes:
       - ../src/php:/var/www/html/
     ports: 
@@ -48,8 +45,8 @@ services:
               level:
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.app-prod-web.rule=Host(`prod.td.anthonymoll.fr`)"
-      - "traefik.http.routers.app-prod-web.entrypoints=web"
+      - "traefik.http.routers.app-prod.rule=Host(`prod.td.anthonymoll.fr`)"
+      - "traefik.http.routers.app-prod.entrypoints=web"
       - "traefik.http.services.app-prod.loadbalancer.server.port=80"
 
 networks:
