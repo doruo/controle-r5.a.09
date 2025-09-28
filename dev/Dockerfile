@@ -10,9 +10,7 @@ RUN pecl install xdebug \
 RUN mkdir -p /tmp/xdebug \
     && chown www-data:www-data /tmp/xdebug
 
-RUN tail -f /tmp/xdebug/
-
-
+#RUN tail -f /tmp/xdebug/
 
 COPY src/php/xdebug.ini /usr/local/etc/php/conf.d/
 
