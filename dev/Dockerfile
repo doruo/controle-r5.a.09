@@ -10,7 +10,7 @@ RUN pecl install xdebug \
 RUN mkdir -p /tmp/xdebug \
     && chown www-data:www-data /tmp/xdebug
 
-#RUN tail - f/tmp/xdebug/
+RUN tail -f /tmp/xdebug/
 
 
 
