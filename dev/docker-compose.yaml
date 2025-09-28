@@ -2,10 +2,12 @@ services:
 
   app-dev:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: ./dev/Dockerfile
     environment:
       XDEBUG_TRIGGER: 1
+    restart:
+      always
     ports:
       - "8181:80"
     volumes:
@@ -35,16 +37,17 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
+    restart:
+      always
     networks:
       - db
-      - external
 
   phpmyadmin:
     image: phpmyadmin:latest
     ports:
       - "8282:80"
     environment:
-      PMA_HOST: bd-dev
+      PMA_HOST: ${PMA_HOST}
       PMA_USER: ${PMA_USER}
       PMA_PASSWORD: ${PMA_PASSWORD}
     networks:
