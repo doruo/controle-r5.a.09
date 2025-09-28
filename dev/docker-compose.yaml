@@ -26,9 +26,9 @@ services:
               level:
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.dev-web.rule=Host(`dev.td.anthonymoll.fr`)"
-      - "traefik.http.routers.dev-web.entrypoints=web"
-      - "traefik.http.services.dev.loadbalancer.server.port=80"
+      - "traefik.http.routers.app-dev.rule=Host(`dev.td.anthonymoll.fr`)"
+      - "traefik.http.routers.app-dev.entrypoints=web"
+      - "traefik.http.services.app-dev.loadbalancer.server.port=80"
 
   bd-dev:
     image: mariadb:latest
@@ -44,7 +44,7 @@ services:
     networks:
       - db
 
-  phpmyadmin:
+  admindb:
     image: phpmyadmin:latest
     ports:
       - "8282:80"
@@ -57,8 +57,8 @@ services:
       - external
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.admindb-web.rule=Host(`admindb.td.anthonymoll.fr`)"
-      - "traefik.http.routers.admindb-web.entrypoints=web"
+      - "traefik.http.routers.admindb.rule=Host(`admindb.td.anthonymoll.fr`)"
+      - "traefik.http.routers.admindb.entrypoints=web"
       - "traefik.http.services.admindb.loadbalancer.server.port=80"
     depends_on:
       - bd-dev
