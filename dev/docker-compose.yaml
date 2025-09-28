@@ -9,7 +9,7 @@ services:
     restart:
       always
     ports:
-      - "8181:80"
+      - "8585:80"
     volumes:
       - ../src/php:/var/www/html
     networks:
@@ -37,6 +37,8 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
+    ports:
+      - "3606:3606"
     restart:
       always
     networks:
