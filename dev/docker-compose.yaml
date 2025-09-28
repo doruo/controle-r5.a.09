@@ -9,7 +9,7 @@ services:
     restart:
       always
     ports:
-      - "8585:80"
+      - "8282:80"
     volumes:
       - ../src/php:/var/www/html
     networks:
@@ -55,6 +55,11 @@ services:
     networks:
       - db
       - external
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.admindb-web.rule=Host(`admindb.td.anthonymoll.fr`)"
+      - "traefik.http.routers.admindb-web.entrypoints=web"
+      - "traefik.http.services.admindb.loadbalancer.server.port=80"
     depends_on:
       - bd-dev
 
