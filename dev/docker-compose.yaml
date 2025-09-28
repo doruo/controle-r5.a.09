@@ -7,7 +7,7 @@ services:
     environment:
       XDEBUG_TRIGGER: 1
     ports:
-      - "8181:80"
+      - "8484:80"
     volumes:
       - ../src/php:/var/www/html
     networks:
@@ -35,6 +35,8 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
+    ports:
+      - "3306:3306"
     networks:
       - db
       - external
@@ -44,7 +46,7 @@ services:
     ports:
       - "8282:80"
     environment:
-      PMA_HOST: bd-dev
+      PMA_HOST: ${PMA_HOST}
       PMA_USER: ${PMA_USER}
       PMA_PASSWORD: ${PMA_PASSWORD}
     networks:
